@@ -1,0 +1,200 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Film;
+use App\Models\Genre;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
+
+class FilmSeeder extends Seeder
+{
+    public function run(): void
+    {
+        $films = [
+            [
+                'title' => 'The Shawshank Redemption',
+                'genre' => 'Drama',
+                'synopsis' => 'Dua pria yang dipenjara menjalin ikatan selama bertahun-tahun, menemukan ketenangan dan penebusan akhirnya melalui tindakan kebaikan bersama.',
+                'director' => 'Frank Darabont',
+                'cast' => 'Tim Robbins, Morgan Freeman, Bob Gunton',
+                'year' => 1994,
+                'duration' => 142,
+                'rental_price' => 15000,
+                'stock' => 10,
+            ],
+            [
+                'title' => 'The Godfather',
+                'genre' => 'Crime',
+                'synopsis' => 'Patriark yang menua dari sebuah dinasti kejahatan terorganisir memindahkan kendali kerajaan rahasianya kepada putranya yang enggan.',
+                'director' => 'Francis Ford Coppola',
+                'cast' => 'Marlon Brando, Al Pacino, James Caan',
+                'year' => 1972,
+                'duration' => 175,
+                'rental_price' => 20000,
+                'stock' => 8,
+            ],
+            [
+                'title' => 'The Dark Knight',
+                'genre' => 'Action',
+                'synopsis' => 'Ketika ancaman yang dikenal sebagai Joker menimbulkan kekacauan dan kekacauan pada orang-orang Gotham, Batman harus menerima salah satu ujian psikologis dan fisik terbesar.',
+                'director' => 'Christopher Nolan',
+                'cast' => 'Christian Bale, Heath Ledger, Aaron Eckhart',
+                'year' => 2008,
+                'duration' => 152,
+                'rental_price' => 18000,
+                'stock' => 12,
+            ],
+            [
+                'title' => 'Pulp Fiction',
+                'genre' => 'Crime',
+                'synopsis' => 'Kehidupan dua mob hitmen, seorang petinju, istri gangster, dan sepasang perampok diner saling terkait dalam empat cerita kekerasan dan penebusan.',
+                'director' => 'Quentin Tarantino',
+                'cast' => 'John Travolta, Uma Thurman, Samuel L. Jackson',
+                'year' => 1994,
+                'duration' => 154,
+                'rental_price' => 17000,
+                'stock' => 9,
+            ],
+            [
+                'title' => 'Forrest Gump',
+                'genre' => 'Drama',
+                'synopsis' => 'Presidensi Ford dan Kennedy, perang Vietnam, dan peristiwa-peristiwa penting lainnya terungkap dari perspektif pria Alabama dengan IQ 75.',
+                'director' => 'Robert Zemeckis',
+                'cast' => 'Tom Hanks, Robin Wright, Gary Sinise',
+                'year' => 1994,
+                'duration' => 142,
+                'rental_price' => 15000,
+                'stock' => 11,
+            ],
+            [
+                'title' => 'Inception',
+                'genre' => 'Sci-Fi',
+                'synopsis' => 'Seorang pencuri yang mencuri rahasia perusahaan melalui penggunaan teknologi berbagi mimpi diberi tugas terbalik untuk menanamkan ide ke dalam pikiran seorang C.E.O.',
+                'director' => 'Christopher Nolan',
+                'cast' => 'Leonardo DiCaprio, Joseph Gordon-Levitt, Elliot Page',
+                'year' => 2010,
+                'duration' => 148,
+                'rental_price' => 18000,
+                'stock' => 10,
+            ],
+            [
+                'title' => 'The Matrix',
+                'genre' => 'Sci-Fi',
+                'synopsis' => 'Ketika seorang hacker komputer yang cantik mengetahui dari pemberontak misterius tentang sifat sebenarnya dari realitasnya dan perannya dalam perang melawan pengontrolnya.',
+                'director' => 'Lana Wachowski, Lilly Wachowski',
+                'cast' => 'Keanu Reeves, Laurence Fishburne, Carrie-Anne Moss',
+                'year' => 1999,
+                'duration' => 136,
+                'rental_price' => 16000,
+                'stock' => 13,
+            ],
+            [
+                'title' => 'Goodfellas',
+                'genre' => 'Crime',
+                'synopsis' => 'Kisah Henry Hill dan kehidupannya di dalam mafia, mencakup hubungannya dengan istrinya Karen Hill dan rekan-rekan gangster Jimmy Conway dan Tommy DeVito.',
+                'director' => 'Martin Scorsese',
+                'cast' => 'Robert De Niro, Ray Liotta, Joe Pesci',
+                'year' => 1990,
+                'duration' => 145,
+                'rental_price' => 17000,
+                'stock' => 7,
+            ],
+            [
+                'title' => 'Interstellar',
+                'genre' => 'Sci-Fi',
+                'synopsis' => 'Tim penjelajah memanfaatkan lubang cacing yang baru ditemukan untuk melampaui batas perjalanan ruang angkasa manusia dan menaklukkan jarak luas yang terlibat dalam perjalanan antarbintang.',
+                'director' => 'Christopher Nolan',
+                'cast' => 'Matthew McConaughey, Anne Hathaway, Jessica Chastain',
+                'year' => 2014,
+                'duration' => 169,
+                'rental_price' => 19000,
+                'stock' => 9,
+            ],
+            [
+                'title' => 'The Lion King',
+                'genre' => 'Animation',
+                'synopsis' => 'Pangeran singa dan ayahnya dibunuh oleh pamannya yang kejam, mensimulasikan kematiannya. Setelah tumbuh di pengasingan, pangeran singa kembali untuk merebut kembali yang menjadi haknya.',
+                'director' => 'Roger Allers, Rob Minkoff',
+                'cast' => 'Matthew Broderick, Jeremy Irons, James Earl Jones',
+                'year' => 1994,
+                'duration' => 88,
+                'rental_price' => 12000,
+                'stock' => 15,
+            ],
+            [
+                'title' => 'Parasite',
+                'genre' => 'Thriller',
+                'synopsis' => 'Keserakahan dan diskriminasi kelas mengancam hubungan simbiotik baru-baru ini antara keluarga kaya Park dan klan Kim yang miskin.',
+                'director' => 'Bong Joon Ho',
+                'cast' => 'Song Kang-ho, Lee Sun-kyun, Cho Yeo-jeong',
+                'year' => 2019,
+                'duration' => 132,
+                'rental_price' => 17000,
+                'stock' => 10,
+            ],
+            [
+                'title' => 'Avengers: Endgame',
+                'genre' => 'Action',
+                'synopsis' => 'Setelah peristiwa menghancurkan Avengers: Infinity War, alam semesta dalam kehancuran. Dengan bantuan sekutu yang tersisa, para Avengers berkumpul sekali lagi untuk membalikkan tindakan Thanos.',
+                'director' => 'Anthony Russo, Joe Russo',
+                'cast' => 'Robert Downey Jr., Chris Evans, Mark Ruffalo',
+                'year' => 2019,
+                'duration' => 181,
+                'rental_price' => 20000,
+                'stock' => 14,
+            ],
+            [
+                'title' => 'Spirited Away',
+                'genre' => 'Animation',
+                'synopsis' => 'Selama kepindahan keluarganya ke pinggiran kota, seorang gadis yang murung berusia 10 tahun mengembara ke dunia yang dikuasai oleh dewa, penyihir, dan roh, dan di mana manusia berubah menjadi binatang.',
+                'director' => 'Hayao Miyazaki',
+                'cast' => 'Daveigh Chase, Suzanne Pleshette, Jason Marsden',
+                'year' => 2001,
+                'duration' => 125,
+                'rental_price' => 14000,
+                'stock' => 11,
+            ],
+            [
+                'title' => 'Joker',
+                'genre' => 'Drama',
+                'synopsis' => 'Seorang komedian yang gagal mulai turun ke kegilaan saat dia berubah menjadi penjahat psikotik.',
+                'director' => 'Todd Phillips',
+                'cast' => 'Joaquin Phoenix, Robert De Niro, Zazie Beetz',
+                'year' => 2019,
+                'duration' => 122,
+                'rental_price' => 16000,
+                'stock' => 12,
+            ],
+            [
+                'title' => 'The Lord of the Rings: The Return of the King',
+                'genre' => 'Fantasy',
+                'synopsis' => 'Gandalf dan Aragorn memimpin dunia Manusia melawan tentara Sauron untuk menarik perhatiannya dari Frodo dan Sam saat mereka mendekati Mount Doom dengan Cincin Satu.',
+                'director' => 'Peter Jackson',
+                'cast' => 'Elijah Wood, Viggo Mortensen, Ian McKellen',
+                'year' => 2003,
+                'duration' => 201,
+                'rental_price' => 20000,
+                'stock' => 8,
+            ],
+        ];
+
+        foreach ($films as $filmData) {
+            $genre = Genre::where('name', $filmData['genre'])->first();
+            
+            Film::create([
+                'title' => $filmData['title'],
+                'slug' => Str::slug($filmData['title']),
+                'genre_id' => $genre->id,
+                'synopsis' => $filmData['synopsis'],
+                'director' => $filmData['director'],
+                'cast' => $filmData['cast'],
+                'year' => $filmData['year'],
+                'duration' => $filmData['duration'],
+                'rental_price' => $filmData['rental_price'],
+                'stock' => $filmData['stock'],
+                'is_available' => true,
+            ]);
+        }
+    }
+}
