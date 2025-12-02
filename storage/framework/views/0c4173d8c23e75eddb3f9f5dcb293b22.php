@@ -29,6 +29,17 @@
         </a>
     </div>
 
+    <?php if($errors->any()): ?>
+        <div class="mb-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+            <strong class="font-bold">Whoops! Something went wrong.</strong>
+            <ul class="mt-2 list-disc list-inside">
+                <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <li><?php echo e($error); ?></li>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </ul>
+        </div>
+    <?php endif; ?>
+
     <form method="POST" action="<?php echo e(route('pegawai.catalog.store')); ?>" enctype="multipart/form-data">
         <?php echo csrf_field(); ?>
 
@@ -103,6 +114,27 @@
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['name' => 'year','label' => 'Release Year','type' => 'number','required' => true,'placeholder' => '2024','min' => '1900','max' => '2099']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal5c2a97ab476b69c1189ee85d1a95204b)): ?>
+<?php $attributes = $__attributesOriginal5c2a97ab476b69c1189ee85d1a95204b; ?>
+<?php unset($__attributesOriginal5c2a97ab476b69c1189ee85d1a95204b); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal5c2a97ab476b69c1189ee85d1a95204b)): ?>
+<?php $component = $__componentOriginal5c2a97ab476b69c1189ee85d1a95204b; ?>
+<?php unset($__componentOriginal5c2a97ab476b69c1189ee85d1a95204b); ?>
+<?php endif; ?>
+
+                <?php if (isset($component)) { $__componentOriginal5c2a97ab476b69c1189ee85d1a95204b = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal5c2a97ab476b69c1189ee85d1a95204b = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.form.input','data' => ['name' => 'duration','label' => 'Duration (minutes)','type' => 'number','required' => true,'placeholder' => '120','min' => '1']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('form.input'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['name' => 'duration','label' => 'Duration (minutes)','type' => 'number','required' => true,'placeholder' => '120','min' => '1']); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal5c2a97ab476b69c1189ee85d1a95204b)): ?>
@@ -246,6 +278,14 @@
 <?php $component = $__componentOriginal5c2a97ab476b69c1189ee85d1a95204b; ?>
 <?php unset($__componentOriginal5c2a97ab476b69c1189ee85d1a95204b); ?>
 <?php endif; ?>
+
+                <div class="md:col-span-2">
+                    <label class="flex items-center">
+                        <input type="checkbox" name="is_available" value="1" checked 
+                            class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                        <span class="ml-2 text-gray-700">Film is available for rental</span>
+                    </label>
+                </div>
             </div>
          <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>

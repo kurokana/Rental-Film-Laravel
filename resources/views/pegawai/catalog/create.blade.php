@@ -11,6 +11,17 @@
         </a>
     </div>
 
+    @if ($errors->any())
+        <div class="mb-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+            <strong class="font-bold">Whoops! Something went wrong.</strong>
+            <ul class="mt-2 list-disc list-inside">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form method="POST" action="{{ route('pegawai.catalog.store') }}" enctype="multipart/form-data">
         @csrf
 
@@ -42,6 +53,15 @@
                     placeholder="2024" 
                     min="1900" 
                     max="2099" 
+                />
+
+                <x-form.input 
+                    name="duration" 
+                    label="Duration (minutes)" 
+                    type="number" 
+                    required 
+                    placeholder="120" 
+                    min="1" 
                 />
 
                 <div class="md:col-span-2">
@@ -94,6 +114,14 @@
                     placeholder="10" 
                     min="0" 
                 />
+
+                <div class="md:col-span-2">
+                    <label class="flex items-center">
+                        <input type="checkbox" name="is_available" value="1" checked 
+                            class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                        <span class="ml-2 text-gray-700">Film is available for rental</span>
+                    </label>
+                </div>
             </div>
         </x-card>
 

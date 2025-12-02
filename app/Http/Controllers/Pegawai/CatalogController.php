@@ -60,15 +60,30 @@ class CatalogController extends Controller
             'poster' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        $data = $request->except('poster');
-        $data['slug'] = Str::slug($request->title);
+        $data = $request->except(['poster', 'is_available']);
+        
+        // Generate unique slug
+        $slug = Str::slug($request->title);
+        $count = Film::where('slug', 'like', $slug . '%')->count();
+        if ($count > 0) {
+            $slug = $slug . '-' . ($count + 1);
+        }
+        $data['slug'] = $slug;
+        
+        $data['is_available'] = $request->has('is_available');
+        $data['average_rating'] = 0;
+        $data['total_reviews'] = 0;
 
         // Handle poster upload
         if ($request->hasFile('poster')) {
             $data['poster'] = $request->file('poster')->store('posters', 'public');
         }
 
+        \Log::info('Creating film with data:', $data);
+        
         $film = Film::create($data);
+        
+        \Log::info('Film created:', ['id' => $film->id, 'is_available' => $film->is_available]);
 
         // Audit log
         AuditLog::log(
