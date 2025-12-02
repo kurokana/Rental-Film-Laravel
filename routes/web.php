@@ -20,6 +20,7 @@ use App\Http\Controllers\Owner\DashboardController as OwnerDashboard;
 use App\Http\Controllers\Owner\PromoController;
 use App\Http\Controllers\Owner\UserRoleController;
 use App\Http\Controllers\Owner\AuditLogController;
+use App\Http\Controllers\Owner\ReportController as OwnerReport;
 
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -104,4 +105,8 @@ Route::prefix('owner')->name('owner.')->middleware(['auth', 'role:owner'])->grou
     // Audit Logs
     Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit-logs.index');
     Route::get('/audit-logs/{auditLog}', [AuditLogController::class, 'show'])->name('audit-logs.show');
+
+    // Reports & Export
+    Route::get('/reports', [OwnerReport::class, 'index'])->name('reports.index');
+    Route::get('/reports/export', [OwnerReport::class, 'export'])->name('reports.export');
 });

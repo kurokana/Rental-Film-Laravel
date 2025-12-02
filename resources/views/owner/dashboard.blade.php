@@ -4,7 +4,27 @@
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h1 class="text-3xl font-bold text-gray-900 mb-8">Owner Dashboard</h1>
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900">Owner Dashboard</h1>
+        
+        <!-- Export Buttons -->
+        <div class="flex gap-2">
+            <a href="{{ route('owner.reports.export', ['format' => 'csv']) }}" 
+                class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Export CSV
+            </a>
+            <a href="{{ route('owner.reports.export', ['format' => 'pdf']) }}" 
+                class="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                </svg>
+                Export PDF
+            </a>
+        </div>
+    </div>
 
     <!-- KPI Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -72,15 +92,18 @@
     <!-- Revenue Chart (Monthly) -->
     <x-card title="Monthly Revenue (Last 6 Months)" class="mb-8">
         <div class="space-y-3">
-            @foreach($monthlyRevenue as $month => $revenue)
+            @php
+                $maxRevenue = max(array_column($monthlyRevenueData, 'revenue'));
+            @endphp
+            @foreach($monthlyRevenueData as $data)
                 <div>
                     <div class="flex justify-between items-center mb-1">
-                        <span class="text-sm font-medium">{{ $month }}</span>
-                        <span class="text-sm font-bold text-indigo-600">Rp {{ number_format($revenue, 0, ',', '.') }}</span>
+                        <span class="text-sm font-medium">{{ $data['month'] }}</span>
+                        <span class="text-sm font-bold text-indigo-600">Rp {{ number_format($data['revenue'], 0, ',', '.') }}</span>
                     </div>
                     <div class="w-full bg-gray-200 rounded-full h-2">
                         <div class="bg-indigo-600 h-2 rounded-full" 
-                            style="width: {{ max(5, ($revenue / max($monthlyRevenue)) * 100) }}%"></div>
+                            style="width: {{ $maxRevenue > 0 ? max(5, ($data['revenue'] / $maxRevenue) * 100) : 5 }}%"></div>
                     </div>
                 </div>
             @endforeach
