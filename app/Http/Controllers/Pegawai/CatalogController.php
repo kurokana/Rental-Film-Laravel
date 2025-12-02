@@ -100,14 +100,14 @@ class CatalogController extends Controller
     }
 
     // Form edit film
-    public function edit(Film $film)
+    public function edit(Film $catalog)
     {
         $genres = Genre::orderBy('name')->get();
-        return view('pegawai.catalog.edit', compact('film', 'genres'));
+        return view('pegawai.catalog.edit', compact('catalog', 'genres'));
     }
 
     // Update film
-    public function update(Request $request, Film $film)
+    public function update(Request $request, Film $catalog)
     {
         $request->validate([
             'title' => 'required|string|max:255',
@@ -120,32 +120,32 @@ class CatalogController extends Controller
             'rental_price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'poster' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'is_available' => 'required|boolean',
         ]);
 
-        $oldData = $film->toArray();
-        $data = $request->except('poster');
+        $oldData = $catalog->toArray();
+        $data = $request->except(['poster', 'is_available']);
         $data['slug'] = Str::slug($request->title);
+        $data['is_available'] = $request->has('is_available');
 
         // Handle poster upload
         if ($request->hasFile('poster')) {
             // Delete old poster
-            if ($film->poster) {
-                Storage::disk('public')->delete($film->poster);
+            if ($catalog->poster) {
+                Storage::disk('public')->delete($catalog->poster);
             }
             $data['poster'] = $request->file('poster')->store('posters', 'public');
         }
 
-        $film->update($data);
+        $catalog->update($data);
 
         // Audit log
         AuditLog::log(
             'update',
             'Film',
-            $film->id,
-            "Film {$film->title} diupdate oleh " . auth()->user()->name,
+            $catalog->id,
+            "Film {$catalog->title} diupdate oleh " . auth()->user()->name,
             $oldData,
-            $film->toArray()
+            $catalog->toArray()
         );
 
         return redirect()->route('pegawai.catalog.index')
@@ -153,33 +153,32 @@ class CatalogController extends Controller
     }
 
     // Hapus film
-    public function destroy(Film $film)
+    public function destroy(Film $catalog)
     {
         // Check if film has active rentals
-        if ($film->rentals()->whereIn('status', ['pending', 'active', 'extended', 'overdue'])->exists()) {
+        if ($catalog->rentals()->whereIn('status', ['pending', 'active', 'extended', 'overdue'])->exists()) {
             return back()->with('error', 'Film tidak dapat dihapus karena masih ada rental aktif.');
         }
 
-        $oldData = $film->toArray();
+        $oldData = $catalog->toArray();
 
         // Delete poster
-        if ($film->poster) {
-            Storage::disk('public')->delete($film->poster);
+        if ($catalog->poster) {
+            Storage::disk('public')->delete($catalog->poster);
         }
 
-        $film->delete();
+        $catalog->delete();
 
         // Audit log
         AuditLog::log(
             'delete',
             'Film',
-            $film->id,
-            "Film {$film->title} dihapus oleh " . auth()->user()->name,
+            $catalog->id,
+            "Film {$catalog->title} dihapus oleh " . auth()->user()->name,
             $oldData,
             null
         );
 
-        return redirect()->route('pegawai.catalog.index')
-            ->with('success', 'Film berhasil dihapus.');
+        return back()->with('success', 'Film berhasil dihapus.');
     }
 }

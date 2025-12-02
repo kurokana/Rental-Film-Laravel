@@ -11,7 +11,7 @@
         </a>
     </div>
 
-    <form method="POST" action="{{ route('pegawai.catalog.update', $film) }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('pegawai.catalog.update', $catalog) }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -22,14 +22,14 @@
                         name="title" 
                         label="Film Title" 
                         required 
-                        :value="$film->title" 
+                        :value="$catalog->title" 
                     />
                 </div>
 
                 <x-form.select name="genre_id" label="Genre" required>
                     <option value="">Select Genre</option>
                     @foreach($genres as $genre)
-                        <option value="{{ $genre->id }}" {{ $film->genre_id == $genre->id ? 'selected' : '' }}>
+                        <option value="{{ $genre->id }}" {{ $catalog->genre_id == $genre->id ? 'selected' : '' }}>
                             {{ $genre->name }}
                         </option>
                     @endforeach
@@ -40,9 +40,18 @@
                     label="Release Year" 
                     type="number" 
                     required 
-                    :value="$film->year" 
+                    :value="$catalog->year" 
                     min="1900" 
                     max="2099" 
+                />
+
+                <x-form.input 
+                    name="duration" 
+                    label="Duration (minutes)" 
+                    type="number" 
+                    required 
+                    :value="$catalog->duration" 
+                    min="1" 
                 />
 
                 <div class="md:col-span-2">
@@ -50,7 +59,7 @@
                         name="director" 
                         label="Director" 
                         required 
-                        :value="$film->director" 
+                        :value="$catalog->director" 
                     />
                 </div>
 
@@ -59,7 +68,7 @@
                         name="cast" 
                         label="Cast" 
                         required 
-                        :value="$film->cast" 
+                        :value="$catalog->cast" 
                     />
                 </div>
 
@@ -69,19 +78,28 @@
                         label="Synopsis" 
                         required 
                         rows="4" 
-                    >{{ $film->synopsis }}</x-form.textarea>
+                    >{{ $catalog->synopsis }}</x-form.textarea>
                 </div>
             </div>
         </x-card>
 
         <x-card title="Rental Information" class="mb-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="md:col-span-2">
+                    <label class="flex items-center">
+                        <input type="hidden" name="is_available" value="0">
+                        <input type="checkbox" name="is_available" value="1" {{ $catalog->is_available ? 'checked' : '' }}
+                            class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        <span class="ml-2 text-gray-700 font-medium">Film tersedia untuk rental</span>
+                    </label>
+                </div>
+
                 <x-form.input 
                     name="rental_price" 
                     label="Rental Price (per day)" 
                     type="number" 
                     required 
-                    :value="$film->rental_price" 
+                    :value="$catalog->rental_price" 
                     min="0" 
                     step="1000" 
                 />
@@ -91,7 +109,7 @@
                     label="Stock Quantity" 
                     type="number" 
                     required 
-                    :value="$film->stock" 
+                    :value="$catalog->stock" 
                     min="0" 
                 />
             </div>
@@ -103,9 +121,9 @@
                     Film Poster
                 </label>
                 
-                @if($film->poster)
+                @if($catalog->poster)
                     <div class="mb-4">
-                        <img src="{{ Storage::url($film->poster) }}" alt="{{ $film->title }}" 
+                        <img src="{{ Storage::url($catalog->poster) }}" alt="{{ $catalog->title }}" 
                             class="w-48 h-auto rounded border">
                         <p class="text-sm text-gray-600 mt-2">Current poster</p>
                     </div>
