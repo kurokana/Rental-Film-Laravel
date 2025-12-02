@@ -49,13 +49,13 @@
             <a href="<?php echo e(route('register')); ?>" class="text-indigo-600 hover:underline">Register</a>
         </p>
 
-        <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+        <!-- <div class="mt-6 p-4 bg-gray-50 rounded-lg">
             <p class="text-sm text-gray-600 font-semibold mb-2">Demo Accounts:</p>
             <div class="text-xs text-gray-600 space-y-1">
-                <p><strong>Owner:</strong> owner@rentalfilm.com / password</p>
+                <!-- <p><strong>Owner:</strong> owner@rentalfilm.com / password</p>
                 <p><strong>Pegawai:</strong> staff@rentalfilm.com / password</p>
-                <p><strong>User:</strong> john@example.com / password</p>
-            </div>
+                <p><strong>User:</strong> john@example.com / password</p> -->
+            </div> 
         </div>
     </div>
 </div>

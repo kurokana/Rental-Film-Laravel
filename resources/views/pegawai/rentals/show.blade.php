@@ -136,7 +136,6 @@
         @if($rental->status === 'pending')
             <form method="POST" action="{{ route('pegawai.rentals.activate', $rental) }}" class="flex-1">
                 @csrf
-                @method('PUT')
                 <x-button type="submit" variant="success" size="lg" class="w-full">Activate Rental</x-button>
             </form>
         @endif
@@ -144,7 +143,6 @@
         @if($rental->status === 'active')
             <form method="POST" action="{{ route('pegawai.rentals.return', $rental) }}" class="flex-1">
                 @csrf
-                @method('PUT')
                 <x-button type="submit" variant="success" size="lg" class="w-full">Process Return</x-button>
             </form>
         @endif
@@ -153,7 +151,6 @@
             <form method="POST" action="{{ route('pegawai.rentals.cancel', $rental) }}" 
                 class="flex-1" onsubmit="return confirm('Are you sure you want to cancel this rental?')">
                 @csrf
-                @method('PUT')
                 <x-button type="submit" variant="danger" size="lg" class="w-full">Cancel Rental</x-button>
             </form>
         @endif

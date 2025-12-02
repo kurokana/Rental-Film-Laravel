@@ -75,6 +75,7 @@ Route::prefix('pegawai')->name('pegawai.')->middleware(['auth', 'role:pegawai,ow
     // Rental Management
     Route::get('/rentals', [RentalManagementController::class, 'index'])->name('rentals.index');
     Route::get('/rentals/{rental}', [RentalManagementController::class, 'show'])->name('rentals.show');
+    Route::post('/rentals/{rental}/activate', [RentalManagementController::class, 'activateRental'])->name('rentals.activate');
     Route::post('/rentals/{rental}/return', [RentalManagementController::class, 'processReturn'])->name('rentals.return');
     Route::post('/rentals/{rental}/extend', [RentalManagementController::class, 'extendRental'])->name('rentals.extend');
     Route::post('/rentals/{rental}/overdue', [RentalManagementController::class, 'handleOverdue'])->name('rentals.overdue');

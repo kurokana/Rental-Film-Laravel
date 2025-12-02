@@ -45,6 +45,45 @@ class RentalManagementController extends Controller
         return view('pegawai.rentals.show', compact('rental'));
     }
 
+    // Aktivasi rental oleh pegawai (dari pending ke active)
+    public function activateRental(Rental $rental)
+    {
+        if ($rental->status !== 'pending') {
+            return back()->with('error', 'Rental ini sudah diaktifkan atau tidak dapat diaktifkan.');
+        }
+
+        DB::beginTransaction();
+        try {
+            $rental->update(['status' => 'active']);
+
+            // Create notification for user
+            Notification::create([
+                'user_id' => $rental->user_id,
+                'title' => 'Rental Diaktifkan',
+                'message' => "Rental film {$rental->film->title} telah diaktifkan oleh staff. Selamat menonton!",
+                'type' => 'rental',
+            ]);
+
+            // Audit log
+            AuditLog::log(
+                'activate',
+                'Rental',
+                $rental->id,
+                "Rental {$rental->rental_code} diaktifkan oleh " . auth()->user()->name,
+                ['status' => 'pending'],
+                ['status' => 'active']
+            );
+
+            DB::commit();
+
+            return back()->with('success', 'Rental berhasil diaktifkan.');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
     // Proses pengembalian manual oleh pegawai
     public function processReturn(Rental $rental)
     {

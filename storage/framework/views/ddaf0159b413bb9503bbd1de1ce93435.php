@@ -250,7 +250,6 @@
                                 <?php if($rental->status === 'pending'): ?>
                                     <form method="POST" action="<?php echo e(route('pegawai.rentals.activate', $rental)); ?>" class="inline">
                                         <?php echo csrf_field(); ?>
-                                        <?php echo method_field('PUT'); ?>
                                         <?php if (isset($component)) { $__componentOriginald0f1fd2689e4bb7060122a5b91fe8561 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginald0f1fd2689e4bb7060122a5b91fe8561 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.button','data' => ['type' => 'submit','variant' => 'success','size' => 'sm']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>

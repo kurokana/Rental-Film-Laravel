@@ -104,7 +104,6 @@
                                 @if($rental->status === 'pending')
                                     <form method="POST" action="{{ route('pegawai.rentals.activate', $rental) }}" class="inline">
                                         @csrf
-                                        @method('PUT')
                                         <x-button type="submit" variant="success" size="sm">Activate Rental</x-button>
                                     </form>
                                 @endif
