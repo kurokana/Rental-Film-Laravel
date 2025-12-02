@@ -47,16 +47,16 @@
                         <div>
                             <span class="text-gray-600">Discount:</span>
                             <p class="font-bold text-indigo-600 text-lg">
-                                @if($promo->discount_type === 'percentage')
-                                    {{ $promo->discount_value }}%
+                                @if($promo->type === 'percentage')
+                                    {{ $promo->value }}%
                                 @else
-                                    Rp {{ number_format($promo->discount_value, 0, ',', '.') }}
+                                    Rp {{ number_format($promo->value, 0, ',', '.') }}
                                 @endif
                             </p>
                         </div>
                         <div>
                             <span class="text-gray-600">Type:</span>
-                            <p class="font-medium">{{ ucfirst($promo->discount_type) }}</p>
+                            <p class="font-medium">{{ ucfirst($promo->type) }}</p>
                         </div>
                         <div>
                             <span class="text-gray-600">Valid From:</span>
@@ -66,10 +66,10 @@
                             <span class="text-gray-600">Valid Until:</span>
                             <p class="font-medium">{{ $promo->end_date->format('d M Y') }}</p>
                         </div>
-                        @if($promo->min_rental_days)
+                        @if($promo->min_transaction)
                             <div>
-                                <span class="text-gray-600">Min Days:</span>
-                                <p class="font-medium">{{ $promo->min_rental_days }} days</p>
+                                <span class="text-gray-600">Min Transaction:</span>
+                                <p class="font-medium">Rp {{ number_format($promo->min_transaction, 0, ',', '.') }}</p>
                             </div>
                         @endif
                         @if($promo->usage_limit)

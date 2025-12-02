@@ -17,21 +17,24 @@
 
         <x-card title="Promo Information" class="mb-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="md:col-span-2">
-                    <x-form.input 
-                        name="code" 
-                        label="Promo Code" 
-                        required 
-                        :value="$promo->code" 
-                    />
-                    <p class="text-sm text-gray-600 mt-1">Uppercase letters and numbers only</p>
-                </div>
+                <x-form.input 
+                    name="code" 
+                    label="Promo Code" 
+                    required 
+                    :value="$promo->code" 
+                />
+
+                <x-form.input 
+                    name="name" 
+                    label="Promo Name" 
+                    required 
+                    :value="$promo->name" 
+                />
 
                 <div class="md:col-span-2">
                     <x-form.textarea 
                         name="description" 
                         label="Description" 
-                        required 
                         rows="3" 
                     >{{ $promo->description }}</x-form.textarea>
                 </div>
@@ -41,9 +44,9 @@
         <x-card title="Discount Settings" class="mb-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <x-form.select name="discount_type" label="Discount Type" required x-model="discountType">
-                        <option value="percentage" {{ $promo->discount_type === 'percentage' ? 'selected' : '' }}>Percentage</option>
-                        <option value="fixed" {{ $promo->discount_type === 'fixed' ? 'selected' : '' }}>Fixed Amount</option>
+                    <x-form.select name="type" label="Discount Type" required x-model="discountType">
+                        <option value="percentage" {{ $promo->type === 'percentage' ? 'selected' : '' }}>Percentage</option>
+                        <option value="fixed" {{ $promo->type === 'fixed' ? 'selected' : '' }}>Fixed Amount</option>
                     </x-form.select>
                 </div>
 
@@ -52,7 +55,7 @@
                         Discount Value <span class="text-red-500">*</span>
                     </label>
                     <div class="relative">
-                        <input type="number" name="discount_value" required value="{{ $promo->discount_value }}"
+                        <input type="number" name="value" required value="{{ $promo->value }}"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
                             :max="discountType === 'percentage' ? 100 : null"
                             min="0"
@@ -83,15 +86,16 @@
             </div>
         </x-card>
 
-        <x-card title="Usage Restrictions (Optional)" class="mb-6">
+        <x-card title="Usage Restrictions" class="mb-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <x-form.input 
-                    name="min_rental_days" 
-                    label="Minimum Rental Days" 
+                    name="min_transaction" 
+                    label="Minimum Transaction (Rp)" 
                     type="number" 
-                    :value="$promo->min_rental_days" 
-                    placeholder="Leave empty for no minimum" 
-                    min="1" 
+                    required
+                    :value="$promo->min_transaction" 
+                    min="0"
+                    step="1000" 
                 />
 
                 <x-form.input 
@@ -102,6 +106,15 @@
                     placeholder="Leave empty for unlimited" 
                     min="1" 
                 />
+            </div>
+
+            <div class="mt-4">
+                <label class="flex items-center">
+                    <input type="hidden" name="is_active" value="0">
+                    <input type="checkbox" name="is_active" value="1" {{ $promo->is_active ? 'checked' : '' }}
+                        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    <span class="ml-2 text-gray-700 font-medium">Promo aktif</span>
+                </label>
             </div>
 
             @if($promo->used_count > 0)
@@ -126,7 +139,7 @@
 <script>
 function promoForm() {
     return {
-        discountType: '{{ $promo->discount_type }}'
+        discountType: '{{ $promo->type }}'
     }
 }
 </script>

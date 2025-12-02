@@ -16,21 +16,24 @@
 
         <x-card title="Promo Information" class="mb-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="md:col-span-2">
-                    <x-form.input 
-                        name="code" 
-                        label="Promo Code" 
-                        required 
-                        placeholder="PROMO2024" 
-                    />
-                    <p class="text-sm text-gray-600 mt-1">Uppercase letters and numbers only</p>
-                </div>
+                <x-form.input 
+                    name="code" 
+                    label="Promo Code" 
+                    required 
+                    placeholder="PROMO2024" 
+                />
+
+                <x-form.input 
+                    name="name" 
+                    label="Promo Name" 
+                    required 
+                    placeholder="New Year Promo" 
+                />
 
                 <div class="md:col-span-2">
                     <x-form.textarea 
                         name="description" 
                         label="Description" 
-                        required 
                         rows="3" 
                         placeholder="Description of the promo..." 
                     />
@@ -41,7 +44,7 @@
         <x-card title="Discount Settings" class="mb-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <x-form.select name="discount_type" label="Discount Type" required x-model="discountType">
+                    <x-form.select name="type" label="Discount Type" required x-model="discountType">
                         <option value="percentage">Percentage</option>
                         <option value="fixed">Fixed Amount</option>
                     </x-form.select>
@@ -52,7 +55,7 @@
                         Discount Value <span class="text-red-500">*</span>
                     </label>
                     <div class="relative">
-                        <input type="number" name="discount_value" required 
+                        <input type="number" name="value" required 
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
                             :placeholder="discountType === 'percentage' ? '10' : '50000'"
                             :max="discountType === 'percentage' ? 100 : null"
@@ -84,14 +87,16 @@
             </div>
         </x-card>
 
-        <x-card title="Usage Restrictions (Optional)" class="mb-6">
+        <x-card title="Usage Restrictions" class="mb-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <x-form.input 
-                    name="min_rental_days" 
-                    label="Minimum Rental Days" 
+                    name="min_transaction" 
+                    label="Minimum Transaction (Rp)" 
                     type="number" 
-                    placeholder="Leave empty for no minimum" 
-                    min="1" 
+                    required
+                    value="0"
+                    min="0"
+                    step="1000" 
                 />
 
                 <x-form.input 
@@ -101,6 +106,15 @@
                     placeholder="Leave empty for unlimited" 
                     min="1" 
                 />
+            </div>
+
+            <div class="mt-4">
+                <label class="flex items-center">
+                    <input type="hidden" name="is_active" value="0">
+                    <input type="checkbox" name="is_active" value="1" checked
+                        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    <span class="ml-2 text-gray-700 font-medium">Promo aktif</span>
+                </label>
             </div>
         </x-card>
 
