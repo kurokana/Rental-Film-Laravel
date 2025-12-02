@@ -39,7 +39,7 @@ Sistem manajemen rental film berbasis web dengan Laravel 11 dan Tailwind CSS ber
 ## Teknologi
 
 - **Framework**: Laravel 11
-- **Database**: MySQL
+- **Database**: MySQL, PostgreSQL
 - **Frontend**: Blade, Tailwind CSS, Alpine.js
 - **Authentication**: Custom (Role-based)
 - **PDF Export**: barryvdh/laravel-dompdf

@@ -27,9 +27,11 @@
 
                 <x-form.select name="genre_id" label="Genre" required>
                     <option value="">Select Genre</option>
-                    @foreach($genres as $genre)
+                    @forelse($genres as $genre)
                         <option value="{{ $genre->id }}">{{ $genre->name }}</option>
-                    @endforeach
+                    @empty
+                        <option value="" disabled>No genres available</option>
+                    @endforelse
                 </x-form.select>
 
                 <x-form.input 

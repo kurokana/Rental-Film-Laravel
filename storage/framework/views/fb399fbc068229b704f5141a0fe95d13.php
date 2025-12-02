@@ -4,10 +4,10 @@ $__newAttributes = [];
 $__propNames = \Illuminate\View\ComponentAttributeBag::extractPropNames(([
     'label',
     'name',
-    'options' => [],
-    'selected' => '',
+    'value' => '',
     'required' => false,
-    'placeholder' => 'Select an option',
+    'placeholder' => '',
+    'rows' => 3,
     'error' => null
 ]));
 
@@ -27,10 +27,10 @@ unset($__newAttributes);
 foreach (array_filter(([
     'label',
     'name',
-    'options' => [],
-    'selected' => '',
+    'value' => '',
     'required' => false,
-    'placeholder' => 'Select an option',
+    'placeholder' => '',
+    'rows' => 3,
     'error' => null
 ]), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
     $$__key = $$__key ?? $__value;
@@ -53,32 +53,19 @@ unset($__defined_vars); ?>
         <?php endif; ?>
     </label>
     
-    <select 
+    <textarea 
         name="<?php echo e($name); ?>"
         id="<?php echo e($name); ?>"
+        rows="<?php echo e($rows); ?>"
+        placeholder="<?php echo e($placeholder); ?>"
         <?php echo e($required ? 'required' : ''); ?>
 
         <?php echo e($attributes->merge(['class' => 'w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-indigo-500' . ($error ? ' border-red-500' : ' border-gray-300')])); ?>
 
-    >
-        <?php if($slot->isEmpty()): ?>
-            <?php if($placeholder): ?>
-                <option value=""><?php echo e($placeholder); ?></option>
-            <?php endif; ?>
-            <?php $__currentLoopData = $options; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value => $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <option value="<?php echo e($value); ?>" <?php echo e(old($name, $selected) == $value ? 'selected' : ''); ?>>
-                    <?php echo e($label); ?>
-
-                </option>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-        <?php else: ?>
-            <?php echo e($slot); ?>
-
-        <?php endif; ?>
-    </select>
+    ><?php echo e(old($name, $value)); ?></textarea>
     
     <?php if($error): ?>
         <p class="mt-1 text-sm text-red-600"><?php echo e($error); ?></p>
     <?php endif; ?>
 </div>
-<?php /**PATH E:\appls\RentalFilm\resources\views/components/form/select.blade.php ENDPATH**/ ?>
+<?php /**PATH E:\appls\RentalFilm\resources\views/components/form/textarea.blade.php ENDPATH**/ ?>
