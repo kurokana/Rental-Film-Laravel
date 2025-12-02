@@ -123,7 +123,6 @@
         <div class="flex gap-3 mt-6">
             <form method="POST" action="{{ route('pegawai.payments.verify', $payment) }}" class="flex-1">
                 @csrf
-                @method('PUT')
                 <x-button type="submit" variant="success" size="lg" class="w-full">
                     Approve Payment
                 </x-button>
@@ -132,7 +131,6 @@
             <form method="POST" action="{{ route('pegawai.payments.reject', $payment) }}" 
                 class="flex-1" onsubmit="return confirm('Are you sure you want to reject this payment?')">
                 @csrf
-                @method('PUT')
                 <x-button type="submit" variant="danger" size="lg" class="w-full">
                     Reject Payment
                 </x-button>

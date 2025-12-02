@@ -199,4 +199,50 @@ class RentalManagementController extends Controller
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
+
+    // Cancel rental oleh pegawai
+    public function cancelRental(Rental $rental)
+    {
+        // Only pending or active rentals can be cancelled
+        if (!in_array($rental->status, ['pending', 'active'])) {
+            return back()->with('error', 'Rental tidak dapat dibatalkan.');
+        }
+
+        DB::beginTransaction();
+        try {
+            $rental->update(['status' => 'cancelled']);
+
+            // Restore stock
+            $rental->film->increment('stock');
+
+            // Cancel related pending payments
+            $rental->payments()->where('status', 'pending')->update(['status' => 'cancelled']);
+
+            // Create notification for user
+            Notification::create([
+                'user_id' => $rental->user_id,
+                'title' => 'Rental Dibatalkan',
+                'message' => "Rental film {$rental->film->title} telah dibatalkan oleh staff.",
+                'type' => 'rental',
+            ]);
+
+            // Audit log
+            AuditLog::log(
+                'cancel',
+                'Rental',
+                $rental->id,
+                "Rental {$rental->rental_code} dibatalkan oleh " . auth()->user()->name,
+                ['status' => $rental->getOriginal('status')],
+                ['status' => 'cancelled']
+            );
+
+            DB::commit();
+
+            return back()->with('success', 'Rental berhasil dibatalkan.');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
 }

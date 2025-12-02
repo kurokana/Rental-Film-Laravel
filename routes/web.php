@@ -77,6 +77,7 @@ Route::prefix('pegawai')->name('pegawai.')->middleware(['auth', 'role:pegawai,ow
     Route::post('/rentals/{rental}/return', [RentalManagementController::class, 'processReturn'])->name('rentals.return');
     Route::post('/rentals/{rental}/extend', [RentalManagementController::class, 'extendRental'])->name('rentals.extend');
     Route::post('/rentals/{rental}/overdue', [RentalManagementController::class, 'handleOverdue'])->name('rentals.overdue');
+    Route::post('/rentals/{rental}/cancel', [RentalManagementController::class, 'cancelRental'])->name('rentals.cancel');
 
     // Catalog Management
     Route::resource('catalog', PegawaiCatalog::class);

@@ -112,7 +112,6 @@
                                 @if($rental->status === 'active')
                                     <form method="POST" action="{{ route('pegawai.rentals.return', $rental) }}" class="inline">
                                         @csrf
-                                        @method('PUT')
                                         <x-button type="submit" variant="success" size="sm">Process Return</x-button>
                                     </form>
                                 @endif
@@ -121,7 +120,6 @@
                                     <form method="POST" action="{{ route('pegawai.rentals.cancel', $rental) }}" 
                                         class="inline" onsubmit="return confirm('Cancel this rental?')">
                                         @csrf
-                                        @method('PUT')
                                         <x-button type="submit" variant="danger" size="sm">Cancel</x-button>
                                     </form>
                                 @endif
