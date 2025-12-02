@@ -1,4 +1,4 @@
-@props(['rental'])
+@props(['status'])
 
 @php
     $statusConfig = [
@@ -7,11 +7,20 @@
         'extended' => ['class' => 'bg-blue-100 text-blue-800', 'label' => 'Extended'],
         'returned' => ['class' => 'bg-gray-100 text-gray-800', 'label' => 'Returned'],
         'overdue' => ['class' => 'bg-red-100 text-red-800', 'label' => 'Overdue'],
+        'cancelled' => ['class' => 'bg-red-100 text-red-800', 'label' => 'Cancelled'],
     ];
     
-    $config = $statusConfig[$rental->status] ?? $statusConfig['pending'];
+    $config = $statusConfig[$status] ?? $statusConfig['pending'];
+    
+    // Determine badge type
+    $badgeType = match($status) {
+        'overdue', 'cancelled' => 'error',
+        'active', 'extended' => 'success',
+        'returned' => 'info',
+        default => 'warning'
+    };
 @endphp
 
-<x-badge :status="$rental->status == 'overdue' ? 'danger' : ($rental->status == 'active' || $rental->status == 'extended' ? 'success' : ($rental->status == 'returned' ? 'secondary' : 'warning'))">
+<x-badge :type="$badgeType">
     {{ $config['label'] }}
 </x-badge>

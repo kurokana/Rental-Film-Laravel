@@ -48,8 +48,12 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/my-rentals', [RentalController::class, 'myRentals'])->name('rentals.my-rentals');
     Route::get('/checkout', [RentalController::class, 'checkout'])->name('rentals.checkout');
     Route::post('/checkout', [RentalController::class, 'processCheckout'])->name('rentals.process-checkout');
+    Route::get('/payment/{payment}', [RentalController::class, 'showPayment'])->name('rentals.payment');
+    Route::put('/payment/{payment}/upload', [RentalController::class, 'uploadProof'])->name('rentals.upload-proof');
     Route::post('/rentals/{rental}/extend', [RentalController::class, 'extend'])->name('rentals.extend');
     Route::post('/rentals/{rental}/return', [RentalController::class, 'return'])->name('rentals.return');
+    Route::put('/rentals/{rental}/cancel', [RentalController::class, 'cancel'])->name('rentals.cancel');
+    Route::get('/rentals/{rental}/invoice', [RentalController::class, 'invoice'])->name('rentals.invoice');
     Route::post('/check-promo', [RentalController::class, 'checkPromo'])->name('rentals.check-promo');
 
     // Reviews

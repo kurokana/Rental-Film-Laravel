@@ -8,8 +8,10 @@ use App\Models\Rental;
 use App\Models\Payment;
 use App\Models\Promo;
 use App\Models\Notification;
+use App\Helpers\QRISHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
 class RentalController extends Controller
@@ -51,9 +53,9 @@ class RentalController extends Controller
     public function processCheckout(Request $request)
     {
         $request->validate([
-            'payment_method' => 'required|in:online,manual',
+            'payment_method' => 'required|in:qris,manual',
             'promo_code' => 'nullable|string',
-            'proof_image' => 'required_if:payment_method,manual|image|mimes:jpeg,png,jpg|max:2048',
+            'proof_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $cartItems = Cart::with('film')->where('user_id', auth()->id())->get();
@@ -82,8 +84,18 @@ class RentalController extends Controller
 
             $total = $subtotal - $discount;
             $rentalDate = Carbon::now();
+            
+            // Create single payment for all rentals
+            $paymentCode = Payment::generatePaymentCode();
+            
+            // Handle proof image upload (optional saat checkout)
+            $proofImage = null;
+            if ($request->hasFile('proof_image')) {
+                $proofImage = $request->file('proof_image')->store('payments', 'public');
+            }
 
-            // Create rentals and payments
+            // Create rentals
+            $rentals = [];
             foreach ($cartItems as $item) {
                 $dueDate = $rentalDate->copy()->addDays($item->rental_days);
 
@@ -102,35 +114,21 @@ class RentalController extends Controller
                     'due_date' => $dueDate,
                     'status' => 'pending',
                 ]);
-
-                // Handle proof image upload
-                $proofImage = null;
-                if ($request->payment_method === 'manual' && $request->hasFile('proof_image')) {
-                    $proofImage = $request->file('proof_image')->store('payments', 'public');
-                }
-
-                // Create payment
-                $payment = Payment::create([
-                    'payment_code' => Payment::generatePaymentCode(),
-                    'rental_id' => $rental->id,
-                    'user_id' => auth()->id(),
-                    'amount' => $rental->total,
-                    'payment_type' => 'rental',
-                    'payment_method' => $request->payment_method,
-                    'proof_image' => $proofImage,
-                    'status' => $request->payment_method === 'online' ? 'verified' : 'pending',
-                    'paid_at' => now(),
-                    'verified_at' => $request->payment_method === 'online' ? now() : null,
-                ]);
-
-                // Update rental status if online payment
-                if ($request->payment_method === 'online') {
-                    $rental->update(['status' => 'active']);
-                    
-                    // Kurangi stock
-                    $item->film->decrement('stock');
-                }
+                
+                $rentals[] = $rental;
             }
+
+            // Create single payment for all rentals
+            $payment = Payment::create([
+                'payment_code' => $paymentCode,
+                'rental_id' => $rentals[0]->id, // Link ke rental pertama
+                'user_id' => auth()->id(),
+                'amount' => $total,
+                'payment_type' => 'rental',
+                'payment_method' => $request->payment_method,
+                'proof_image' => $proofImage,
+                'status' => 'pending',
+            ]);
 
             // Clear cart
             Cart::where('user_id', auth()->id())->delete();
@@ -139,23 +137,83 @@ class RentalController extends Controller
             Notification::create([
                 'user_id' => auth()->id(),
                 'title' => 'Checkout Berhasil',
-                'message' => $request->payment_method === 'online' 
-                    ? 'Pembayaran berhasil diverifikasi. Film dapat Anda nikmati.' 
-                    : 'Pembayaran Anda sedang diverifikasi oleh staff kami.',
+                'message' => 'Silakan selesaikan pembayaran Anda.',
+                'type' => 'payment',
+            ]);
+
+            DB::commit();
+
+            // Redirect ke halaman payment dengan QRIS
+            return redirect()->route('rentals.payment', $payment)
+                ->with('success', 'Checkout berhasil. Silakan selesaikan pembayaran.');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    // Halaman Payment dengan QRIS
+    public function showPayment(Payment $payment)
+    {
+        // Check ownership
+        if ($payment->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $qrCode = null;
+        if ($payment->payment_method === 'qris') {
+            // Generate QRIS
+            $qrCode = QRISHelper::generateSimple($payment->payment_code, $payment->amount);
+        }
+
+        return view('rentals.payment', compact('payment', 'qrCode'));
+    }
+
+    // Upload Payment Proof
+    public function uploadProof(Request $request, Payment $payment)
+    {
+        // Check ownership
+        if ($payment->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $request->validate([
+            'proof_image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            // Delete old proof if exists
+            if ($payment->proof_image) {
+                Storage::disk('public')->delete($payment->proof_image);
+            }
+
+            // Upload new proof
+            $proofImage = $request->file('proof_image')->store('payments', 'public');
+            
+            $payment->update([
+                'proof_image' => $proofImage,
+                'paid_at' => now(),
+                'status' => 'pending', // Menunggu verifikasi staff
+            ]);
+
+            // Notification
+            Notification::create([
+                'user_id' => auth()->id(),
+                'title' => 'Bukti Pembayaran Diterima',
+                'message' => 'Bukti pembayaran Anda sedang diverifikasi oleh staff kami.',
                 'type' => 'payment',
             ]);
 
             DB::commit();
 
             return redirect()->route('rentals.my-rentals')
-                ->with('success', 'Checkout berhasil! ' . 
-                    ($request->payment_method === 'manual' 
-                        ? 'Pembayaran Anda akan segera diverifikasi.' 
-                        : 'Selamat menikmati film!'));
+                ->with('success', 'Bukti pembayaran berhasil diupload. Menunggu verifikasi staff.');
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal upload bukti: ' . $e->getMessage());
         }
     }
 

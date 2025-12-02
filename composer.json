@@ -7,8 +7,10 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "chillerlan/php-qrcode": "^5.0",
         "laravel/framework": "^11.31",
-        "laravel/tinker": "^2.9"
+        "laravel/tinker": "^2.9",
+        "midtrans/midtrans-php": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -24,7 +26,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Helpers/QRISHelper.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
