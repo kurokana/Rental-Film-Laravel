@@ -21,8 +21,8 @@ class CatalogController extends Controller
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
             $query->where(function($q) use ($search) {
-                $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('director', 'like', "%{$search}%");
+                $q->where('title', 'ilike', "%{$search}%")
+                  ->orWhere('director', 'ilike', "%{$search}%");
             });
         }
 

@@ -25,9 +25,9 @@ class RentalManagementController extends Controller
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
             $query->where(function($q) use ($search) {
-                $q->where('rental_code', 'like', "%{$search}%")
+                $q->where('rental_code', 'ilike', "%{$search}%")
                   ->orWhereHas('user', function($q2) use ($search) {
-                      $q2->where('name', 'like', "%{$search}%");
+                      $q2->where('name', 'ilike', "%{$search}%");
                   });
             });
         }

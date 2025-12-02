@@ -40,7 +40,7 @@ class AuditLogController extends Controller
         // Search
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
-            $query->where('description', 'like', "%{$search}%");
+            $query->where('description', 'ilike', "%{$search}%");
         }
 
         $logs = $query->orderBy('created_at', 'desc')->paginate(50);
